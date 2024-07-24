@@ -13,7 +13,7 @@ public class EmployerDtoOut {
     private Long id;
     private String email;
     private String name;
-    private int provinceId;
+    private Integer provinceId;
     private String provinceName;
     private String description;
 

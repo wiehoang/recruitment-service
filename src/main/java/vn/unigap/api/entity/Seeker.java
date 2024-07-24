@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class Seeker {
     private String name;
 
     @Column(name = "BIRTHDAY")
-    private Date birthday;
+    private String birthday;
 
     @Column(name = "ADDRESS")
     private String address;

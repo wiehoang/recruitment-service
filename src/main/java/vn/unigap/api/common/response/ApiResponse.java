@@ -19,5 +19,9 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> success(T object) {
         return new ApiResponse<>(ErrorCode.SUCCESS, HttpStatus.OK.value(), "Success", object);
     }
+
+    public static <T> ApiResponse<T> create(T object) {
+        return new ApiResponse<>(ErrorCode.SUCCESS, HttpStatus.CREATED.value(), "Created", object);
+    }
 }
 

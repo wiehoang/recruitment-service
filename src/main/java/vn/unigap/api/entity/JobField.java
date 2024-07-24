@@ -13,21 +13,16 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "JOB_PROVINCE")
-public class JobProvince {
+@Table(name = "JOB_FIELD")
+public class JobField {
     @Id
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "province", cascade = CascadeType.PERSIST)
-    private Set<Employer> employers = new HashSet<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "jobProvince")
-    private Set<JobsToJobProvince> jobsToJobProvinces = new HashSet<>();
-
+    @OneToMany(mappedBy = "jobField")
+    Set<JobsToJobField> jobsToJobField = new HashSet<>();
 }

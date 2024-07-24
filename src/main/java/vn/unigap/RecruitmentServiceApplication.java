@@ -1,7 +1,10 @@
 package vn.unigap;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
 
 @SpringBootApplication
 public class RecruitmentServiceApplication {
@@ -10,4 +13,12 @@ public class RecruitmentServiceApplication {
 		SpringApplication.run(RecruitmentServiceApplication.class, args);
 	}
 
+//	// Only run this migration script one time
+//	@Bean
+//	CommandLineRunner run(DatabaseMigrationService databaseMigrationService) {
+//		return args -> {
+//			databaseMigrationService.migrateJobsToJobProvince();
+//			databaseMigrationService.migrateJobsToJobField();
+//		};
+//	}
 }

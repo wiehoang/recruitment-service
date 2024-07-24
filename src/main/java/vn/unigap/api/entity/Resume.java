@@ -22,7 +22,7 @@ public class Resume {
     @Column(name = "SEEKER_ID")
     private Long seekerId;
 
-    @Column(name = "CAREER_OBJ")
+    @Column(name = "CAREER_OBJ", columnDefinition = "TEXT")
     private String careerObj;
 
     @Column(name = "TITLE")

@@ -1,6 +1,7 @@
 package vn.unigap.api.controller;
 
 import jakarta.validation.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -10,15 +11,12 @@ import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.service.EmployerService;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/employer")
 public class EmployerController {
-    private final EmployerService employerService;
-
     @Autowired
-    EmployerController(EmployerService employerService) {
-        this.employerService = employerService;
-    }
+    private final EmployerService employerService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployerById(@PathVariable(value = "id") Long id) {
