@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobsDtoIn {
+public final class JobsDtoIn {
 
     @NotNull
     private String title;

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JobsDtoOut {
+public final class JobsDtoOut {
     private Long id;
     private String title;
     private Long employerId;

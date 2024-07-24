@@ -177,11 +177,11 @@ public class JobsServiceImpl implements JobsService {
 
     }
 
-    @Override
-    @Transactional
-    public PageDtoOut<JobsDtoOut> getAllJobs(Long employerId, Pageable pageable) {
-
-    }
+//    @Override
+//    @Transactional
+//    public PageDtoOut<JobsDtoOut> getAllJobs(Long employerId, Pageable pageable) {
+//
+//    }
 
 
 
