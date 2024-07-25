@@ -1,10 +1,8 @@
 package vn.unigap.api.dto.out;
 
 import lombok.*;
-import vn.unigap.api.entity.Employer;
 import vn.unigap.api.entity.Jobs;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -28,7 +26,7 @@ public final class JobsDtoOut {
     private Integer salary;
     private Date expiredAt = new Date();
 
-    public static JobsDtoOut fromCreate(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
+    public static JobsDtoOut createFrom(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
         return JobsDtoOut.builder()
                 .title(jobs.getTitle())
                 .employerId(jobs.getEmployer().getId())
@@ -41,7 +39,7 @@ public final class JobsDtoOut {
                 .build();
     }
 
-    public static JobsDtoOut fromUpdate(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
+    public static JobsDtoOut updateFrom(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
         return JobsDtoOut.builder()
                 .id(jobs.getId())
                 .title(jobs.getTitle())
@@ -54,7 +52,7 @@ public final class JobsDtoOut {
                 .build();
     }
 
-    public static JobsDtoOut fromGet(Jobs jobs, Set<JobFieldDtoOut> fields, Set<JobProvinceDtoOut> provinces) {
+    public static JobsDtoOut getFrom(Jobs jobs, Set<JobFieldDtoOut> fields, Set<JobProvinceDtoOut> provinces) {
         return JobsDtoOut.builder()
                 .title(jobs.getTitle())
                 .quantity(jobs.getQuantity())
@@ -67,4 +65,17 @@ public final class JobsDtoOut {
                 .employerName(jobs.getEmployer() != null ? jobs.getEmployer().getName() : "")
                 .build();
     }
+
+    public static JobsDtoOut pageFrom(Jobs jobs) {
+        return JobsDtoOut.builder()
+                .id(jobs.getId())
+                .title(jobs.getTitle())
+                .quantity(jobs.getQuantity())
+                .salary(jobs.getSalary())
+                .expiredAt(jobs.getExpiredAt())
+                .employerId(jobs.getEmployer().getId())
+                .employerName(jobs.getEmployer().getName())
+                .build();
+    }
 }
+

@@ -2,13 +2,16 @@ package vn.unigap.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.unigap.api.common.errorcode.ErrorCode;
 import vn.unigap.api.common.exception.ApiException;
 import vn.unigap.api.dto.in.JobsDtoIn;
+import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.UpdateJobsDtoIn;
 import vn.unigap.api.dto.out.JobFieldDtoOut;
 import vn.unigap.api.dto.out.JobProvinceDtoOut;
@@ -86,7 +89,7 @@ public class JobsServiceImpl implements JobsService {
             jobsToJobProvinceRepository.save(jobsToJobProvince);
         }
 
-        return JobsDtoOut.fromCreate(jobs, fieldIds, provinceIds);
+        return JobsDtoOut.createFrom(jobs, fieldIds, provinceIds);
     }
 
     @Override
@@ -138,7 +141,7 @@ public class JobsServiceImpl implements JobsService {
             jobsToJobProvinceRepository.save(jobsToJobProvince);
         }
 
-        return JobsDtoOut.fromUpdate(jobs, fieldIds, provinceIds);
+        return JobsDtoOut.updateFrom(jobs, fieldIds, provinceIds);
     }
 
     @Override
@@ -173,16 +176,49 @@ public class JobsServiceImpl implements JobsService {
             jobProvincesDtoOut.add(jobProvinceDtoOut);
         }
 
-        return JobsDtoOut.fromGet(jobs, jobFieldsDtoOut, jobProvincesDtoOut);
+        return JobsDtoOut.getFrom(jobs, jobFieldsDtoOut, jobProvincesDtoOut);
 
     }
 
-//    @Override
-//    @Transactional
-//    public PageDtoOut<JobsDtoOut> getAllJobs(Long employerId, Pageable pageable) {
-//
-//    }
+    @Override
+    @Transactional
+    public PageDtoOut<JobsDtoOut> getAllJobs(Long employerId, PageDtoIn pageDtoIn) {
+        if (employerId == -1) {
+            Page<Jobs> pageJobs = this.jobsRepository.findAll(
+                    PageRequest.of(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize() -1,
+                    Sort.by("expiredAt").descending()
+                    .and(Sort.by("employerName").ascending())));
 
+            return PageDtoOut.from(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize(),
+                    pageJobs.getTotalElements(),
+                    pageJobs.getTotalPages(),
+                    pageJobs.stream().map(JobsDtoOut::pageFrom).toList());
+        } else {
+            Page<Jobs> pageJobsById = jobsRepository.findAllByEmployerId(employerId,
+                    PageRequest.of(pageDtoIn.getPage(),
+                            pageDtoIn.getPageSize() - 1,
+                            Sort.by("expiredAt").descending()
+                            .and(Sort.by("employerName").ascending())));
+
+            return PageDtoOut.from(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize(),
+                    pageJobsById.getTotalElements(),
+                    pageJobsById.getTotalPages(),
+                    pageJobsById.stream().map(JobsDtoOut::pageFrom).toList());
+
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteJob(Long id) {
+        Jobs jobs = jobsRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+        jobsRepository.delete(jobs);
+        return true;
+    }
 
 
     public Set<Long> convertStringtoSet(String str) {

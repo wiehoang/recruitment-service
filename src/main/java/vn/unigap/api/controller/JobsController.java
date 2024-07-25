@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.unigap.api.common.response.ApiResponse;
 import vn.unigap.api.dto.in.JobsDtoIn;
+import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.UpdateJobsDtoIn;
 import vn.unigap.api.service.JobsService;
 
@@ -31,6 +32,16 @@ public class JobsController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getJob(@PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(jobsService.getJob(id)));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllJobs(@RequestParam Long employerId, @RequestBody @Valid PageDtoIn pageDtoIn) {
+        return ResponseEntity.ok(ApiResponse.success(jobsService.getAllJobs(employerId, pageDtoIn)));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteJob(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.success(jobsService.deleteJob(id)));
     }
 
 }

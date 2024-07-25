@@ -9,5 +9,6 @@ import vn.unigap.api.entity.Jobs;
 
 @Repository
 public interface JobsRepository extends JpaRepository<Jobs, Long> {
+    Page<Jobs> findAll(Pageable pageable);
     Page<Jobs> findAllByEmployerId(Long employerId, Pageable pageable);
 }
