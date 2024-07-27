@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Data
@@ -28,12 +29,13 @@ public class Seeker {
     @Column(name = "ADDRESS")
     private String address;
 
-    @Column(name = "PROVINCE")
-    private Integer province;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PROVINCE", nullable = true)
+    private JobProvince jobProvince;
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+    private Date createdAt = new Date();
 
     @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
+    private Date updatedAt = new Date();
 }

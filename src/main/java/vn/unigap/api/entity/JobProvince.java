@@ -30,4 +30,7 @@ public class JobProvince {
     @OneToMany(mappedBy = "jobProvince")
     private Set<JobsToJobProvince> jobsToJobProvinces = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "jobProvince", cascade = CascadeType.PERSIST)
+    private Set<Seeker> seekers = new HashSet<>();
 }

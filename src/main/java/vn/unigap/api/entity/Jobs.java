@@ -21,7 +21,7 @@ public class Jobs {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "EMPLOYER_ID")
+    @JoinColumn(name = "EMPLOYER_ID", nullable = true)
     private Employer employer;
 
     @Column(name = "TITLE")

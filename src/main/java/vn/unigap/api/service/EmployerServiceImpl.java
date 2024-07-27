@@ -1,5 +1,6 @@
 package vn.unigap.api.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,15 +21,12 @@ import vn.unigap.api.repository.JobProvinceRepository;
 
 
 @Service
+@RequiredArgsConstructor
 public class EmployerServiceImpl implements EmployerService {
-    private final EmployerRepository employerRepository;
-    private final JobProvinceRepository jobProvinceRepository;
 
     @Autowired
-    public EmployerServiceImpl(EmployerRepository employerRepository, JobProvinceRepository jobProvinceRepository) {
-        this.employerRepository = employerRepository;
-        this.jobProvinceRepository = jobProvinceRepository;
-    }
+    private final EmployerRepository employerRepository;
+    private final JobProvinceRepository jobProvinceRepository;
 
     @Override
     public EmployerDtoOut getEmployerById(Long id) {

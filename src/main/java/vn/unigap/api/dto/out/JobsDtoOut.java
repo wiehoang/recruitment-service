@@ -53,6 +53,13 @@ public final class JobsDtoOut {
     }
 
     public static JobsDtoOut getFrom(Jobs jobs, Set<JobFieldDtoOut> fields, Set<JobProvinceDtoOut> provinces) {
+        Long employerId = null;
+        String employerName = null;
+        if (jobs.getEmployer() != null) {
+            employerId = jobs.getEmployer().getId();
+            employerName = jobs.getEmployer().getName();
+        }
+
         return JobsDtoOut.builder()
                 .title(jobs.getTitle())
                 .quantity(jobs.getQuantity())
@@ -61,20 +68,27 @@ public final class JobsDtoOut {
                 .provinces(provinces)
                 .salary(jobs.getSalary())
                 .expiredAt(jobs.getExpiredAt())
-                .employerId(jobs.getEmployer() != null ? jobs.getEmployer().getId() : -1)
-                .employerName(jobs.getEmployer() != null ? jobs.getEmployer().getName() : "")
+                .employerId(employerId)
+                .employerName(employerName)
                 .build();
     }
 
     public static JobsDtoOut pageFrom(Jobs jobs) {
+        Long employerId = null;
+        String employerName = null;
+        if (jobs.getEmployer() != null) {
+            employerId = jobs.getEmployer().getId();
+            employerName = jobs.getEmployer().getName();
+        }
+
         return JobsDtoOut.builder()
                 .id(jobs.getId())
                 .title(jobs.getTitle())
                 .quantity(jobs.getQuantity())
                 .salary(jobs.getSalary())
                 .expiredAt(jobs.getExpiredAt())
-                .employerId(jobs.getEmployer().getId())
-                .employerName(jobs.getEmployer().getName())
+                .employerId(employerId)
+                .employerName(employerName)
                 .build();
     }
 }

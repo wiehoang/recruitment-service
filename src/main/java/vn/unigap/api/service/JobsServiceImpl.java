@@ -152,12 +152,6 @@ public class JobsServiceImpl implements JobsService {
         Jobs jobs = jobsRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
 
-        // Handle employer is null
-        if (jobs.getEmployer() == null) {
-            Long employerId = jobs.getEmployer().getId() != null ? jobs.getEmployer().getId() : -1;
-            String employerName= jobs.getEmployer().getName();
-        }
-
         // Create a set of fields with (id, name) format for each element
         Set<Long> fieldIds = jobsToJobFieldRepository.findFieldIdByJobId(id);
         Set<JobField> jobFields = new HashSet<>(jobFieldRepository.findAllById(fieldIds));
