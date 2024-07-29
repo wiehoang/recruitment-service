@@ -23,7 +23,7 @@ public class JobProvince {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "province", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "jobProvince", cascade = CascadeType.PERSIST)
     private Set<Employer> employers = new HashSet<>();
 
     @JsonIgnore

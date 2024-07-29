@@ -2,7 +2,7 @@ package vn.unigap.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,16 +26,16 @@ public class Employer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROVINCE")
-    private JobProvince province;
+    private JobProvince jobProvince;
 
     @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+    private Date createdAt = new Date();
 
     @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
+    private Date updatedAt = new Date();
 
     @OneToMany(mappedBy = "employer")
     private Set<Jobs> jobs = new HashSet<>();

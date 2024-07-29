@@ -1,7 +1,6 @@
 package vn.unigap.api.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -14,8 +13,12 @@ import vn.unigap.api.dto.out.EmployerDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.entity.Employer;
 import vn.unigap.api.entity.JobProvince;
+import vn.unigap.api.mapper.EmployerMapper;
 import vn.unigap.api.repository.EmployerRepository;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+
 import org.springframework.data.domain.Page;
 import vn.unigap.api.repository.JobProvinceRepository;
 
@@ -24,15 +27,15 @@ import vn.unigap.api.repository.JobProvinceRepository;
 @RequiredArgsConstructor
 public class EmployerServiceImpl implements EmployerService {
 
-    @Autowired
     private final EmployerRepository employerRepository;
     private final JobProvinceRepository jobProvinceRepository;
+    private final EmployerMapper employerMapper;
 
     @Override
     public EmployerDtoOut getEmployerById(Long id) {
         Employer employer = employerRepository.findById(id)
                             .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
-        return EmployerDtoOut.from(employer);
+        return employerMapper.get(employer);
     }
 
     @Override
@@ -51,11 +54,11 @@ public class EmployerServiceImpl implements EmployerService {
         Employer employer = new Employer();
         employer.setEmail(employerDtoIn.getEmail());
         employer.setName(employerDtoIn.getName());
-        employer.setProvince(province);
-        employer.setCreatedAt(currentDateTime());
+        employer.setJobProvince(province);
+        employer.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         employerRepository.save(employer);
 
-        return EmployerDtoOut.from(employer);
+        return employerMapper.create(employer);
     }
 
     @Override
@@ -71,12 +74,12 @@ public class EmployerServiceImpl implements EmployerService {
 
         // Update a record
         employer.setName(employerDtoIn.getName());
-        employer.setProvince(province);
+        employer.setJobProvince(province);
         employer.setDescription(employerDtoIn.getDescription());
-        employer.setUpdatedAt(currentDateTime());
+        employer.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         employerRepository.save(employer);
 
-        return EmployerDtoOut.from(employer);
+        return employerMapper.update(employer);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class EmployerServiceImpl implements EmployerService {
                             pageDtoIn.getPageSize(),
                             pageEmployer.getTotalElements(),
                             pageEmployer.getTotalPages(),
-                            pageEmployer.stream().map(EmployerDtoOut::from).toList());
+                            pageEmployer.stream().map(employerMapper::getPage).toList());
     }
 
     @Override
@@ -97,9 +100,4 @@ public class EmployerServiceImpl implements EmployerService {
         return true;
     }
 
-
-    // Create a fetching local time function
-    public static LocalDateTime currentDateTime() {
-        return LocalDateTime.now();
-    }
 }

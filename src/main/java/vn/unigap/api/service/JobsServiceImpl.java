@@ -1,7 +1,6 @@
 package vn.unigap.api.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,17 +18,16 @@ import vn.unigap.api.dto.out.JobsDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.entity.*;
 import vn.unigap.api.repository.*;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
-import static vn.unigap.api.service.EmployerServiceImpl.currentDateTime;
 
 
 @Service
 @RequiredArgsConstructor
 public class JobsServiceImpl implements JobsService {
 
-    @Autowired
     final private EmployerRepository employerRepository;
     final private JobsRepository jobsRepository;
     final private JobsToJobFieldRepository jobsToJobFieldRepository;
@@ -67,8 +65,8 @@ public class JobsServiceImpl implements JobsService {
         jobs.setDescription(jobsDtoIn.getDescription());
         jobs.setSalary(jobsDtoIn.getSalary());
         jobs.setExpiredAt(jobsDtoIn.getExpiredAt());
-        jobs.setCreatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
-        jobs.setUpdatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
+        jobs.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        jobs.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         jobsRepository.save(jobs);
 
         // Save a new record in JobsToJobField
@@ -89,7 +87,7 @@ public class JobsServiceImpl implements JobsService {
             jobsToJobProvinceRepository.save(jobsToJobProvince);
         }
 
-        return JobsDtoOut.createFrom(jobs, fieldIds, provinceIds);
+        return JobsDtoOut.create(jobs, fieldIds, provinceIds);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class JobsServiceImpl implements JobsService {
         jobs.setDescription(updateJobsDtoIn.getDescription());
         jobs.setSalary(updateJobsDtoIn.getSalary());
         jobs.setExpiredAt(updateJobsDtoIn.getExpiredAt());
-        jobs.setUpdatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
+        jobs.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         jobsRepository.save(jobs);
 
         // Update a record in JobsToJobField
@@ -141,7 +139,7 @@ public class JobsServiceImpl implements JobsService {
             jobsToJobProvinceRepository.save(jobsToJobProvince);
         }
 
-        return JobsDtoOut.updateFrom(jobs, fieldIds, provinceIds);
+        return JobsDtoOut.update(jobs, fieldIds, provinceIds);
     }
 
     @Override
@@ -170,7 +168,7 @@ public class JobsServiceImpl implements JobsService {
             jobProvincesDtoOut.add(jobProvinceDtoOut);
         }
 
-        return JobsDtoOut.getFrom(jobs, jobFieldsDtoOut, jobProvincesDtoOut);
+        return JobsDtoOut.get(jobs, jobFieldsDtoOut, jobProvincesDtoOut);
 
     }
 
@@ -188,7 +186,7 @@ public class JobsServiceImpl implements JobsService {
                     pageDtoIn.getPageSize(),
                     pageJobs.getTotalElements(),
                     pageJobs.getTotalPages(),
-                    pageJobs.stream().map(JobsDtoOut::pageFrom).toList());
+                    pageJobs.stream().map(JobsDtoOut::getPage).toList());
         } else {
             Page<Jobs> pageJobsById = jobsRepository.findAllByEmployerId(employerId,
                     PageRequest.of(pageDtoIn.getPage(),
@@ -200,7 +198,7 @@ public class JobsServiceImpl implements JobsService {
                     pageDtoIn.getPageSize(),
                     pageJobsById.getTotalElements(),
                     pageJobsById.getTotalPages(),
-                    pageJobsById.stream().map(JobsDtoOut::pageFrom).toList());
+                    pageJobsById.stream().map(JobsDtoOut::getPage).toList());
 
         }
     }

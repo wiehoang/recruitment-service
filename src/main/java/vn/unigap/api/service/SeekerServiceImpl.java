@@ -1,7 +1,6 @@
 package vn.unigap.api.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,23 +15,23 @@ import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.SeekerDtoOut;
 import vn.unigap.api.entity.JobProvince;
 import vn.unigap.api.entity.Seeker;
+import vn.unigap.api.mapper.SeekerMapper;
 import vn.unigap.api.repository.JobProvinceRepository;
 import vn.unigap.api.repository.SeekerRepository;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import static vn.unigap.api.service.EmployerServiceImpl.currentDateTime;
 
 
 @Service
 @RequiredArgsConstructor
 public class SeekerServiceImpl implements SeekerService {
 
-    @Autowired
     private final SeekerRepository seekerRepository;
     private final JobProvinceRepository jobProvinceRepository;
+    private final SeekerMapper seekerMapper;
 
     @Override
     @Transactional
@@ -48,11 +47,11 @@ public class SeekerServiceImpl implements SeekerService {
         seeker.setBirthday(formatBirthday(seekerDtoIn.getBirthday()));
         seeker.setAddress(seekerDtoIn.getAddress());
         seeker.setJobProvince(jobProvince);
-        seeker.setCreatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
-        seeker.setUpdatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
+        seeker.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        seeker.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         seekerRepository.save(seeker);
 
-        return SeekerDtoOut.from(seeker);
+        return seekerMapper.create(seeker);
     }
 
     @Override
@@ -72,10 +71,10 @@ public class SeekerServiceImpl implements SeekerService {
         seeker.setBirthday(formatBirthday(seekerDtoIn.getBirthday()));
         seeker.setAddress(seekerDtoIn.getAddress());
         seeker.setJobProvince(jobProvince);
-        seeker.setUpdatedAt(Date.from(currentDateTime().toInstant(ZoneOffset.UTC)));
+        seeker.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
         seekerRepository.save(seeker);
 
-        return SeekerDtoOut.from(seeker);
+        return seekerMapper.update(seeker);
     }
 
     @Override
@@ -86,7 +85,7 @@ public class SeekerServiceImpl implements SeekerService {
         Seeker seeker = seekerRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Seeker not found"));
 
-        return SeekerDtoOut.from(seeker);
+        return seekerMapper.get(seeker);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class SeekerServiceImpl implements SeekerService {
                     pageDtoIn.getPageSize(),
                     pageSeeker.getTotalElements(),
                     pageSeeker.getTotalPages(),
-                    pageSeeker.stream().map(SeekerDtoOut::from).toList());
+                    pageSeeker.stream().map(seekerMapper::get).toList());
         } else {
             Page<Seeker> pageSeekerByProvince = seekerRepository.findAllByJobProvinceId(jobProvinceId, PageRequest.of(pageDtoIn.getPage(),
                     pageDtoIn.getPageSize() - 1,
@@ -112,7 +111,7 @@ public class SeekerServiceImpl implements SeekerService {
                     pageDtoIn.getPageSize(),
                     pageSeekerByProvince.getTotalElements(),
                     pageSeekerByProvince.getTotalPages(),
-                    pageSeekerByProvince.stream().map(SeekerDtoOut::from).toList());
+                    pageSeekerByProvince.stream().map(seekerMapper::get).toList());
         }
     }
     @Override

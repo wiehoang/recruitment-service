@@ -26,7 +26,7 @@ public final class JobsDtoOut {
     private Integer salary;
     private Date expiredAt = new Date();
 
-    public static JobsDtoOut createFrom(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
+    public static JobsDtoOut create(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
         return JobsDtoOut.builder()
                 .title(jobs.getTitle())
                 .employerId(jobs.getEmployer().getId())
@@ -39,7 +39,7 @@ public final class JobsDtoOut {
                 .build();
     }
 
-    public static JobsDtoOut updateFrom(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
+    public static JobsDtoOut update(Jobs jobs, Set<Long> fieldIds, Set<Long> provinceIds) {
         return JobsDtoOut.builder()
                 .id(jobs.getId())
                 .title(jobs.getTitle())
@@ -52,7 +52,7 @@ public final class JobsDtoOut {
                 .build();
     }
 
-    public static JobsDtoOut getFrom(Jobs jobs, Set<JobFieldDtoOut> fields, Set<JobProvinceDtoOut> provinces) {
+    public static JobsDtoOut get(Jobs jobs, Set<JobFieldDtoOut> fields, Set<JobProvinceDtoOut> provinces) {
         Long employerId = null;
         String employerName = null;
         if (jobs.getEmployer() != null) {
@@ -73,7 +73,7 @@ public final class JobsDtoOut {
                 .build();
     }
 
-    public static JobsDtoOut pageFrom(Jobs jobs) {
+    public static JobsDtoOut getPage(Jobs jobs) {
         Long employerId = null;
         String employerName = null;
         if (jobs.getEmployer() != null) {

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.unigap.api.entity.Seeker;
 
 
 @Builder
@@ -15,30 +14,11 @@ import vn.unigap.api.entity.Seeker;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SeekerDtoOut {
 
+    private Long id;
     private String name;
-
     private String birthday;
-
     private String address;
-
     private Integer provinceId;
-
     private String provinceName;
 
-    public static SeekerDtoOut from(Seeker seeker) {
-        Integer provinceId = null;
-        String provinceName = null;
-        if (seeker.getJobProvince() != null) {
-            provinceId = seeker.getJobProvince().getId();
-            provinceName = seeker.getJobProvince().getName();
-        }
-
-        return SeekerDtoOut.builder()
-                .name(seeker.getName())
-                .birthday(seeker.getBirthday())
-                .address(seeker.getAddress())
-                .provinceId(provinceId)
-                .provinceName(provinceName)
-                .build();
-    }
 }
