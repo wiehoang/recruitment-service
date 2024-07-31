@@ -22,6 +22,8 @@ import java.util.Date;
 import org.springframework.data.domain.Page;
 import vn.unigap.api.repository.JobProvinceRepository;
 
+import static vn.unigap.api.common.Common.currentDateTime;
+
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +57,7 @@ public class EmployerServiceImpl implements EmployerService {
         employer.setEmail(employerDtoIn.getEmail());
         employer.setName(employerDtoIn.getName());
         employer.setJobProvince(province);
-        employer.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        employer.setCreatedAt(currentDateTime());
         employerRepository.save(employer);
 
         return employerMapper.create(employer);
@@ -76,7 +78,7 @@ public class EmployerServiceImpl implements EmployerService {
         employer.setName(employerDtoIn.getName());
         employer.setJobProvince(province);
         employer.setDescription(employerDtoIn.getDescription());
-        employer.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        employer.setUpdatedAt(currentDateTime());
         employerRepository.save(employer);
 
         return employerMapper.update(employer);

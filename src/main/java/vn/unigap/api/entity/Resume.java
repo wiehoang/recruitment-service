@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -19,8 +22,9 @@ public class Resume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "SEEKER_ID")
-    private Long seekerId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SEEKER_ID")
+    private Seeker seeker;
 
     @Column(name = "CAREER_OBJ", columnDefinition = "TEXT")
     private String careerObj;
@@ -31,15 +35,15 @@ public class Resume {
     @Column(name = "SALARY")
     private Integer salary;
 
-    @Column(name = "FIELDS")
-    private String fields;
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.PERSIST)
+    private List<ResumeToJobField> resumeToJobField = new ArrayList<>();
 
-    @Column(name = "PROVINCES")
-    private String provinces;
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.PERSIST)
+    private List<ResumeToJobProvince> resumeToJobProvince = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+    private Date createdAt = new Date();
 
     @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
+    private Date updatedAt = new Date();
 }

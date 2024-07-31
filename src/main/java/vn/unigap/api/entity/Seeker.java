@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -37,4 +39,7 @@ public class Seeker {
 
     @Column(name = "UPDATED_AT")
     private Date updatedAt = new Date();
+
+    @OneToMany(mappedBy = "seeker")
+    private Set<Resume> resumes = new HashSet<>();
 }

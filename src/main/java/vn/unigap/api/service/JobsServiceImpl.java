@@ -18,10 +18,9 @@ import vn.unigap.api.dto.out.JobsDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.entity.*;
 import vn.unigap.api.repository.*;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
-import java.util.stream.Collectors;
+import static vn.unigap.api.common.Common.convertStringToSet;
+import static vn.unigap.api.common.Common.currentDateTime;
 
 
 @Service
@@ -40,24 +39,24 @@ public class JobsServiceImpl implements JobsService {
     public JobsDtoOut createJob(JobsDtoIn jobsDtoIn) {
 
         // Handle not exists employer's id
-        if (!employerRepository.findById(jobsDtoIn.getEmployerId()).isPresent()) {
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found");
-        }
+        Employer employer = employerRepository.findById(jobsDtoIn.getEmployerId())
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
 
         // Handle invalid field's ids
-        Set<Long> fieldIds = convertStringtoSet(jobsDtoIn.getFieldIds());
-        if(jobFieldRepository.findAllById(fieldIds).size() != fieldIds.size()){
+        Set<Long> fieldIds = convertStringToSet(jobsDtoIn.getFieldIds());
+        List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
+        if(jobFields.size() != fieldIds.size()){
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid province's ids
-        Set<Long> provinceIds = convertStringtoSet(jobsDtoIn.getProvinceIds());
-        if(jobProvinceRepository.findAllById(provinceIds).size() != provinceIds.size()) {
+        Set<Long> provinceIds = convertStringToSet(jobsDtoIn.getProvinceIds());
+        List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
+        if(jobProvinces.size() != provinceIds.size()) {
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Save a new record in Jobs
-        Employer employer = employerRepository.findById(jobsDtoIn.getEmployerId()).orElse(null);
         Jobs jobs = new Jobs();
         jobs.setTitle(jobsDtoIn.getTitle());
         jobs.setEmployer(employer);
@@ -65,13 +64,12 @@ public class JobsServiceImpl implements JobsService {
         jobs.setDescription(jobsDtoIn.getDescription());
         jobs.setSalary(jobsDtoIn.getSalary());
         jobs.setExpiredAt(jobsDtoIn.getExpiredAt());
-        jobs.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
-        jobs.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        jobs.setCreatedAt(currentDateTime());
+        jobs.setUpdatedAt(currentDateTime());
         jobsRepository.save(jobs);
 
         // Save a new record in JobsToJobField
-        for (Long fieldId : fieldIds) {
-            JobField jobField = jobFieldRepository.findById(fieldId).orElse(null);
+        for (JobField jobField : jobFields) {
             JobsToJobField jobsToJobField = new JobsToJobField();
             jobsToJobField.setJobs(jobs);
             jobsToJobField.setJobField(jobField);
@@ -79,8 +77,7 @@ public class JobsServiceImpl implements JobsService {
         }
 
         // Save a new record in JobsToJobProvince
-        for (Long provinceId : provinceIds) {
-            JobProvince jobProvince = jobProvinceRepository.findById(provinceId).orElse(null);
+        for (JobProvince jobProvince : jobProvinces) {
             JobsToJobProvince jobsToJobProvince = new JobsToJobProvince();
             jobsToJobProvince.setJobs(jobs);
             jobsToJobProvince.setJobProvince(jobProvince);
@@ -95,35 +92,34 @@ public class JobsServiceImpl implements JobsService {
     public JobsDtoOut updateJob(Long id, UpdateJobsDtoIn updateJobsDtoIn) {
 
         // Handle not exists job's id
-        if (!jobsRepository.findById(id).isPresent()) {
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found");
-        }
+        Jobs jobs = jobsRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
 
         // Handle invalid field's ids
-        Set<Long> fieldIds = convertStringtoSet(updateJobsDtoIn.getFieldIds());
-        if(jobFieldRepository.findAllById(fieldIds).size() != fieldIds.size()){
+        Set<Long> fieldIds = convertStringToSet(updateJobsDtoIn.getFieldIds());
+        List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
+        if (jobFields.size() != fieldIds.size()) {
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid province's ids
-        Set<Long> provinceIds = convertStringtoSet(updateJobsDtoIn.getProvinceIds());
-        if(jobProvinceRepository.findAllById(provinceIds).size() != provinceIds.size()) {
+        Set<Long> provinceIds = convertStringToSet(updateJobsDtoIn.getProvinceIds());
+        List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
+        if (jobProvinces.size() != provinceIds.size()) {
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Update a record in Jobs
-        Jobs jobs = new Jobs();
         jobs.setTitle(updateJobsDtoIn.getTitle());
         jobs.setQuantity(updateJobsDtoIn.getQuantity());
         jobs.setDescription(updateJobsDtoIn.getDescription());
         jobs.setSalary(updateJobsDtoIn.getSalary());
         jobs.setExpiredAt(updateJobsDtoIn.getExpiredAt());
-        jobs.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        jobs.setUpdatedAt(currentDateTime());
         jobsRepository.save(jobs);
 
         // Update a record in JobsToJobField
-        for (Long fieldId : fieldIds) {
-            JobField jobField = jobFieldRepository.findById(fieldId).orElse(null);
+        for (JobField jobField : jobFields) {
             JobsToJobField jobsToJobField = new JobsToJobField();
             jobsToJobField.setJobs(jobs);
             jobsToJobField.setJobField(jobField);
@@ -131,8 +127,7 @@ public class JobsServiceImpl implements JobsService {
         }
 
         // Update a record in JobsToJobProvince
-        for (Long provinceId : provinceIds) {
-            JobProvince jobProvince = jobProvinceRepository.findById(provinceId).orElse(null);
+        for (JobProvince jobProvince : jobProvinces) {
             JobsToJobProvince jobsToJobProvince = new JobsToJobProvince();
             jobsToJobProvince.setJobs(jobs);
             jobsToJobProvince.setJobProvince(jobProvince);
@@ -210,15 +205,6 @@ public class JobsServiceImpl implements JobsService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
         jobsRepository.delete(jobs);
         return true;
-    }
-
-
-    public Set<Long> convertStringtoSet(String str) {
-        Set<Long> strToSet = Arrays.stream(str.split("[-_, ]"))
-                .filter(s -> !s.isEmpty())      // Convert fields type
-                .map(Long::parseLong)           // to implement into
-                .collect(Collectors.toSet());  // JPA named query
-        return strToSet;
     }
 
 }

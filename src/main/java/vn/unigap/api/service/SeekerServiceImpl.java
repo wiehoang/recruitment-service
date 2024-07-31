@@ -18,11 +18,8 @@ import vn.unigap.api.entity.Seeker;
 import vn.unigap.api.mapper.SeekerMapper;
 import vn.unigap.api.repository.JobProvinceRepository;
 import vn.unigap.api.repository.SeekerRepository;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import static vn.unigap.api.common.Common.currentDateTime;
+import static vn.unigap.api.common.Common.formatBirthday;
 
 
 @Service
@@ -47,8 +44,8 @@ public class SeekerServiceImpl implements SeekerService {
         seeker.setBirthday(formatBirthday(seekerDtoIn.getBirthday()));
         seeker.setAddress(seekerDtoIn.getAddress());
         seeker.setJobProvince(jobProvince);
-        seeker.setCreatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
-        seeker.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        seeker.setCreatedAt(currentDateTime());
+        seeker.setUpdatedAt(currentDateTime());
         seekerRepository.save(seeker);
 
         return seekerMapper.create(seeker);
@@ -71,7 +68,7 @@ public class SeekerServiceImpl implements SeekerService {
         seeker.setBirthday(formatBirthday(seekerDtoIn.getBirthday()));
         seeker.setAddress(seekerDtoIn.getAddress());
         seeker.setJobProvince(jobProvince);
-        seeker.setUpdatedAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        seeker.setUpdatedAt(currentDateTime());
         seekerRepository.save(seeker);
 
         return seekerMapper.update(seeker);
@@ -123,9 +120,4 @@ public class SeekerServiceImpl implements SeekerService {
         return true;
     }
 
-    public static String formatBirthday(Date birthday) {
-        LocalDate localDateBirthday = birthday.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return formatter.format(localDateBirthday);
-    }
 }
