@@ -2,6 +2,8 @@ package vn.unigap.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -165,9 +167,28 @@ public class ResumeServiceImpl implements ResumeService {
         return ResumeDtoOut.get(resume, jobFieldDtoOuts, jobProvinceDtoOuts);
     }
 
-//    @Override
-//    @Transactional
-//    public PageDtoOut<ResumeDtoOut> getAllResumes(Long seekerId, PageDtoIn pageDtoIn) {
-//
-//    }
+    @Override
+    @Transactional
+    public PageDtoOut<ResumeDtoOut> getAllResumes(Long seekerId, PageDtoIn pageDtoIn) {
+
+        if (seekerId == -1) {
+            Page<Resume> pageResume = resumeRepository.findAll(PageRequest.of(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize() - 1,
+                    Sort.by("title").and(Sort.by("seekerName"))));
+            return PageDtoOut.from(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize() - 1,
+                    pageResume.getTotalElements(),
+                    pageResume.getTotalPages(),
+                    pageResume.stream().map(ResumeDtoOut::getPage).toList());
+        }
+
+        Page<Resume> pageResumeById = resumeRepository.findAllBySeekerId(seekerId, PageRequest.of(pageDtoIn.getPage(),
+                    pageDtoIn.getPageSize() - 1,
+                    Sort.by("title").and(Sort.by("seekerName"))));
+        return PageDtoOut.from(pageDtoIn.getPage(),
+                pageDtoIn.getPageSize() -1,
+                pageResumeById.getTotalElements(),
+                pageResumeById.getTotalPages(),
+                pageResumeById.stream().map(ResumeDtoOut::getPage).toList());
+    }
 }

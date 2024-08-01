@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.unigap.api.common.response.ApiResponse;
+import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.ResumeDtoIn;
 import vn.unigap.api.dto.in.UpdateResumeDtoIn;
 import vn.unigap.api.service.ResumeService;
@@ -30,6 +31,11 @@ public class ResumeController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getResume(@PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(resumeService.getResume(id)));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllResumes(@RequestParam("seekerId") Long seekerId, @RequestBody @Valid PageDtoIn pageDtoIn) {
+        return ResponseEntity.ok(ApiResponse.success(resumeService.getAllResumes(seekerId, pageDtoIn)));
     }
 
 

@@ -146,8 +146,7 @@ public class JobsServiceImpl implements JobsService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
 
         // Create a set of fields with (id, name) format for each element
-        Set<Long> fieldIds = jobsToJobFieldRepository.findFieldIdByJobId(id);
-        Set<JobField> jobFields = new HashSet<>(jobFieldRepository.findAllById(fieldIds));
+        Set<JobField> jobFields = jobsToJobFieldRepository.findJobFieldByJobId(id);
         Set<JobFieldDtoOut> jobFieldsDtoOut = new HashSet<>();
         for(JobField jobField : jobFields){
             JobFieldDtoOut jobFieldDtoOut = JobFieldDtoOut.from(jobField);
@@ -155,8 +154,7 @@ public class JobsServiceImpl implements JobsService {
         }
 
         // Create a set of provinces with (id, name) format for each element
-        Set<Long> provinceIds = jobsToJobProvinceRepository.findProvinceIdByJobId(id);
-        Set<JobProvince> jobProvinces = new HashSet<>(jobProvinceRepository.findAllById(provinceIds));
+        Set<JobProvince> jobProvinces = jobsToJobProvinceRepository.findJobProvinceByJobId(id);
         Set<JobProvinceDtoOut> jobProvincesDtoOut = new HashSet<>();
         for(JobProvince jobProvince : jobProvinces){
             JobProvinceDtoOut jobProvinceDtoOut = JobProvinceDtoOut.from(jobProvince);
