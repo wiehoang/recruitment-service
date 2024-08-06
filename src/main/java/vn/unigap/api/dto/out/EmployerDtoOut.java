@@ -3,6 +3,7 @@ package vn.unigap.api.dto.out;
 import lombok.*;
 
 
+@Builder
 @Setter
 @Data
 @NoArgsConstructor

@@ -38,5 +38,10 @@ public class ResumeController {
         return ResponseEntity.ok(ApiResponse.success(resumeService.getAllResumes(seekerId, pageDtoIn)));
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteResume(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.success(resumeService.deleteResume(id)));
+    }
+
 
 }

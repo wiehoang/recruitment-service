@@ -191,4 +191,17 @@ public class ResumeServiceImpl implements ResumeService {
                 pageResumeById.getTotalPages(),
                 pageResumeById.stream().map(ResumeDtoOut::getPage).toList());
     }
+
+    @Override
+    @Transactional
+    public boolean deleteResume(Long id) {
+
+        // Handle invalid resume's id
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Resume not found"));
+
+        resumeRepository.delete(resume);
+
+        return true;
+    }
 }

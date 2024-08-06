@@ -1,9 +1,11 @@
 package vn.unigap.api.dto.in;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
 
+@Builder
 @Data
 public class ResumeDtoIn {
 

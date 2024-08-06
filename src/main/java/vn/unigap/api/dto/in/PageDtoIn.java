@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 
+@Builder
 @Data
 public class PageDtoIn {
     @NotNull

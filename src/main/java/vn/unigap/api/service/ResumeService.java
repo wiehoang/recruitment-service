@@ -14,5 +14,6 @@ public interface ResumeService {
     ResumeDtoOut updateResume(Long id, UpdateResumeDtoIn updateResumeDtoIn);
     ResumeDtoOut getResume(Long id);
     PageDtoOut<ResumeDtoOut> getAllResumes(Long seekerId, PageDtoIn pageDtoIn);
+    boolean deleteResume(Long id);
 
 }
