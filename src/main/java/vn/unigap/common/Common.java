@@ -1,4 +1,4 @@
-package vn.unigap.api.common;
+package vn.unigap.common;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
