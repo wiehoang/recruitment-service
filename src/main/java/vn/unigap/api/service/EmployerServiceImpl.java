@@ -5,8 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import vn.unigap.api.common.errorcode.ErrorCode;
-import vn.unigap.api.common.exception.*;
 import vn.unigap.api.dto.in.EmployerDtoIn;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.out.EmployerDtoOut;
@@ -15,14 +13,10 @@ import vn.unigap.api.entity.Employer;
 import vn.unigap.api.entity.JobProvince;
 import vn.unigap.api.mapper.EmployerMapper;
 import vn.unigap.api.repository.EmployerRepository;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
-
 import org.springframework.data.domain.Page;
 import vn.unigap.api.repository.JobProvinceRepository;
-
-import static vn.unigap.api.common.Common.currentDateTime;
+import vn.unigap.common.exception.ApiException;
+import static vn.unigap.common.Common.currentDateTime;
 
 
 @Service
@@ -36,7 +30,7 @@ public class EmployerServiceImpl implements EmployerService {
     @Override
     public EmployerDtoOut getEmployerById(Long id) {
         Employer employer = employerRepository.findById(id)
-                            .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
+                            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Employer not found"));
         return employerMapper.get(employer);
     }
 
@@ -45,12 +39,12 @@ public class EmployerServiceImpl implements EmployerService {
 
         // Handle exists email
         if (employerRepository.findByEmail(employerDtoIn.getEmail()).isPresent()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Email already exists");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 
         // Handle invalid province id
         JobProvince province = jobProvinceRepository.findById((long) employerDtoIn.getProvinceId())
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id"));
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id"));
 
         // Create a new record if passing validation
         Employer employer = new Employer();
@@ -68,11 +62,11 @@ public class EmployerServiceImpl implements EmployerService {
 
         // Handle invalid employer id
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Employer not found"));
 
         // Handle invalid province id
         JobProvince province = jobProvinceRepository.findById((long) employerDtoIn.getProvinceId())
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id"));
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id"));
 
         // Update a record
         employer.setName(employerDtoIn.getName());
@@ -97,7 +91,7 @@ public class EmployerServiceImpl implements EmployerService {
     @Override
     public boolean deleteEmployer(Long id) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Employer not found"));
         employerRepository.delete(employer);
         return true;
     }

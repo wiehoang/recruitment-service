@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.unigap.api.common.response.ApiResponse;
+import vn.unigap.common.response.ApiResponse;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.SeekerDtoIn;
 import vn.unigap.api.service.SeekerService;
@@ -21,7 +21,7 @@ public class SeekerController {
 
     @PostMapping
     public ResponseEntity<?> createSeeker(@RequestBody @Valid SeekerDtoIn seekerDtoIn) {
-        return ResponseEntity.ok(ApiResponse.create(seekerService.createSeeker(seekerDtoIn)));
+        return ResponseEntity.ok(ApiResponse.success(seekerService.createSeeker(seekerDtoIn)));
     }
 
     @PutMapping(value = "/{id}")

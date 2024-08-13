@@ -6,8 +6,7 @@ import java.util.List;
 
 
 @Builder
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageDtoOut<T> {

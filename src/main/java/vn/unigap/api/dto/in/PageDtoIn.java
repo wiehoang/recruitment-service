@@ -8,6 +8,7 @@ import lombok.*;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class PageDtoIn {
     @NotNull
     @Min(1)

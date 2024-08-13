@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import vn.unigap.api.dto.in.EmployerDtoIn;
-import vn.unigap.api.common.response.ApiResponse;
+import vn.unigap.common.response.ApiResponse;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.service.EmployerService;
 

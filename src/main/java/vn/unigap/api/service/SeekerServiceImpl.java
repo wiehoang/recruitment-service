@@ -7,8 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.unigap.api.common.errorcode.ErrorCode;
-import vn.unigap.api.common.exception.ApiException;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.SeekerDtoIn;
 import vn.unigap.api.dto.out.PageDtoOut;
@@ -18,8 +16,9 @@ import vn.unigap.api.entity.Seeker;
 import vn.unigap.api.mapper.SeekerMapper;
 import vn.unigap.api.repository.JobProvinceRepository;
 import vn.unigap.api.repository.SeekerRepository;
-import static vn.unigap.api.common.Common.currentDateTime;
-import static vn.unigap.api.common.Common.formatBirthday;
+import vn.unigap.common.exception.ApiException;
+import static vn.unigap.common.Common.currentDateTime;
+import static vn.unigap.common.Common.formatBirthday;
 
 
 @Service
@@ -36,7 +35,7 @@ public class SeekerServiceImpl implements SeekerService {
 
         // Handle invalid province's id
         JobProvince jobProvince = jobProvinceRepository.findById((long) seekerDtoIn.getProvince())
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province's id"));
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Invalid province's id"));
 
         // Save a new record
         Seeker seeker = new Seeker();
@@ -57,11 +56,11 @@ public class SeekerServiceImpl implements SeekerService {
 
         // Handle invalid seeker's id
         Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Seeker not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Seeker not found"));
 
         // Handle invalid province's id
         JobProvince jobProvince = jobProvinceRepository.findById((long) seekerDtoIn.getProvince())
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province's id"));
+                .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Invalid province's id"));
 
         // Update the record
         seeker.setName(seekerDtoIn.getName());
@@ -80,7 +79,7 @@ public class SeekerServiceImpl implements SeekerService {
 
         // Handle invalid seeker's id
         Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Seeker not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Seeker not found"));
 
         return seekerMapper.get(seeker);
     }
@@ -115,7 +114,7 @@ public class SeekerServiceImpl implements SeekerService {
     @Transactional
     public boolean deleteSeeker(Long id) {
         Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Seeker not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Seeker not found"));
         seekerRepository.delete(seeker);
         return true;
     }

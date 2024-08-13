@@ -214,9 +214,7 @@ class EmployerServiceTests {
     }
 
     private PageDtoIn createPageDtoIn() {
-        PageDtoIn pageDtoIn = new PageDtoIn();
-        pageDtoIn.setPage(1);
-        pageDtoIn.setPageSize(10);
+        PageDtoIn pageDtoIn = new PageDtoIn(1, 10);
         return pageDtoIn;
     }
 }

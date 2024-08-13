@@ -1,19 +1,18 @@
 version: '3.3'
 
 services:
-  mysql-db:
+  recruitment-service-db:
     image: mysql:8.0.33
     environment:
       MYSQL_ROOT_PASSWORD: Admin@123
-#      MYSQL_DATABASE: auth
       MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: newpassword
     ports:
     - '3306:3306'
     volumes:
-    - mysql-db:/var/lib/mysql
+    - recruitment-service-volume:/var/lib/mysql
     restart: on-failure
 
 volumes:
-  mysql-db:
-    driver: local
+  recruitment-service-volume:
+    external: true

@@ -7,8 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.unigap.api.common.errorcode.ErrorCode;
-import vn.unigap.api.common.exception.ApiException;
 import vn.unigap.api.dto.in.JobsDtoIn;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.UpdateJobsDtoIn;
@@ -18,9 +16,10 @@ import vn.unigap.api.dto.out.JobsDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.entity.*;
 import vn.unigap.api.repository.*;
+import vn.unigap.common.exception.ApiException;
 import java.util.*;
-import static vn.unigap.api.common.Common.convertStringToSet;
-import static vn.unigap.api.common.Common.currentDateTime;
+import static vn.unigap.common.Common.convertStringToSet;
+import static vn.unigap.common.Common.currentDateTime;
 
 
 @Service
@@ -40,20 +39,20 @@ public class JobsServiceImpl implements JobsService {
 
         // Handle not exists employer's id
         Employer employer = employerRepository.findById(jobsDtoIn.getEmployerId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Employer not found"));
 
         // Handle invalid field's ids
         Set<Long> fieldIds = convertStringToSet(jobsDtoIn.getFieldIds());
         List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
         if(jobFields.size() != fieldIds.size()){
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid province's ids
         Set<Long> provinceIds = convertStringToSet(jobsDtoIn.getProvinceIds());
         List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
         if(jobProvinces.size() != provinceIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Save a new record in Jobs
@@ -93,20 +92,20 @@ public class JobsServiceImpl implements JobsService {
 
         // Handle not exists job's id
         Jobs jobs = jobsRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Job not found"));
 
         // Handle invalid field's ids
         Set<Long> fieldIds = convertStringToSet(updateJobsDtoIn.getFieldIds());
         List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
         if (jobFields.size() != fieldIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid province's ids
         Set<Long> provinceIds = convertStringToSet(updateJobsDtoIn.getProvinceIds());
         List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
         if (jobProvinces.size() != provinceIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Update a record in Jobs
@@ -143,7 +142,7 @@ public class JobsServiceImpl implements JobsService {
 
         // Handle not exists job's id
         Jobs jobs = jobsRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Job not found"));
 
         // Create a set of fields with (id, name) format for each element
         Set<JobField> jobFields = jobsToJobFieldRepository.findJobFieldByJobId(id);
@@ -200,7 +199,7 @@ public class JobsServiceImpl implements JobsService {
     @Transactional
     public boolean deleteJob(Long id) {
         Jobs jobs = jobsRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Job not found"));
         jobsRepository.delete(jobs);
         return true;
     }

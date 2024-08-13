@@ -7,8 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.unigap.api.common.errorcode.ErrorCode;
-import vn.unigap.api.common.exception.ApiException;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.ResumeDtoIn;
 import vn.unigap.api.dto.in.UpdateResumeDtoIn;
@@ -18,13 +16,12 @@ import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.ResumeDtoOut;
 import vn.unigap.api.entity.*;
 import vn.unigap.api.repository.*;
-
+import vn.unigap.common.exception.ApiException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static vn.unigap.api.common.Common.convertStringToSet;
-import static vn.unigap.api.common.Common.currentDateTime;
+import static vn.unigap.common.Common.convertStringToSet;
+import static vn.unigap.common.Common.currentDateTime;
 
 
 @Service
@@ -44,20 +41,20 @@ public class ResumeServiceImpl implements ResumeService {
 
         // Handle invalid seekerId
         Seeker seeker = seekerRepository.findById(resumeDtoIn.getSeekerId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Seeker not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Seeker not found"));
 
         // Handle invalid fieldId
         Set<Long> fieldIds = convertStringToSet(resumeDtoIn.getFieldIds());
         List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
         if (jobFields.size() != fieldIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid provinceId
         Set<Long> provinceIds = convertStringToSet(resumeDtoIn.getProvinceIds());
         List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
         if (jobProvinces.size() != provinceIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Save a new record to Resume
@@ -94,20 +91,20 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDtoOut updateResume(Long id, UpdateResumeDtoIn updateResumeDtoIn) {
         // Handle invalid resume's id
         Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Resume not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Resume not found"));
 
         // Handle invalid fieldId
         Set<Long> fieldIds = convertStringToSet(updateResumeDtoIn.getFieldIds());
         List<JobField> jobFields = jobFieldRepository.findAllById(fieldIds);
         if (jobFields.size() != fieldIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid field id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid field id");
         }
 
         // Handle invalid provinceId
         Set<Long> provinceIds = convertStringToSet(updateResumeDtoIn.getProvinceIds());
         List<JobProvince> jobProvinces = jobProvinceRepository.findAllById(provinceIds);
         if (jobProvinces.size() != provinceIds.size()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Invalid province id");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid province id");
         }
 
         // Update a record in Resume
@@ -142,7 +139,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         // Handle invalid resume's id
         Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Resume not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Resume not found"));
 
         // Create a set of fields with (id, name) format for each element
         Set<JobField> jobFields = resumeToJobFieldRepository.findJobFieldByResumeId(id);
@@ -198,7 +195,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         // Handle invalid resume's id
         Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Resume not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Resume not found"));
 
         resumeRepository.delete(resume);
 

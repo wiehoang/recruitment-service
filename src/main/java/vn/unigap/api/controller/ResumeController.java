@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.unigap.api.common.response.ApiResponse;
+import vn.unigap.common.response.ApiResponse;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.ResumeDtoIn;
 import vn.unigap.api.dto.in.UpdateResumeDtoIn;
@@ -20,7 +20,7 @@ public class ResumeController {
 
     @PostMapping
     public ResponseEntity<?> createResume(@RequestBody @Valid ResumeDtoIn resumeDtoIn) {
-        return ResponseEntity.ok(ApiResponse.create(resumeService.createResume(resumeDtoIn)));
+        return ResponseEntity.ok(ApiResponse.success(resumeService.createResume(resumeDtoIn)));
     }
 
     @PutMapping(value = "/{id}")

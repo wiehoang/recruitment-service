@@ -1,5 +1,6 @@
 package vn.unigap.api.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 
@@ -8,6 +9,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployerDtoOut {
 
     private Long id;
