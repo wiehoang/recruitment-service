@@ -1,5 +1,6 @@
 package vn.unigap.common.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -27,7 +28,7 @@ import vn.unigap.common.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,6 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleCustomException(ApiException e) {
         ApiResponse<Object> apiResponse = ApiResponse.error(e.getStatusCode(), e.getStatus(), e.getMessage());
+        log.debug("Error occurred: {}", e.getMessage(), e);
         return new ResponseEntity<>(apiResponse, e.getStatus());
     }
 
@@ -54,6 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        log.debug("Method argument not valid: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, status);
     }
@@ -68,6 +71,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String error = ex.getRequestPartName() + " part is missing";
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        log.debug("Missing servlet request part: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, status);
     }
@@ -81,6 +85,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         String error = ex.getParameterName() + " parameter is missing";
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        log.debug("Missing servlet request parameter: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, status);
     }
@@ -94,6 +99,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         String error = ex.getVariableName() + " variable is missing in path";
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        log.debug("Missing path variable: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, status);
     }
@@ -108,6 +114,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String requiredType = ex.getRequiredType() == null ? null : ex.getRequiredType().getName();
         String error = ex.getPropertyName() + " should be " + requiredType + " type";
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        log.debug("Type mismatch: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -120,6 +127,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), "HttpMessageNotReadable");
+        log.debug("Http message not readable: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -132,6 +140,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), "HttpMessageNotReadable");
+        log.debug("Http message not writable: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -146,6 +155,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String supportedMethod = ex.getSupportedMethods() == null ? null : String.join(", ", ex.getSupportedMethods());
         String error = ex.getMethod() + " method is not supported. Supported methods: " + supportedMethod;
         ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), error);
+        log.debug("Http request method not supported: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -160,6 +170,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String supportedType = ex.getSupportedMediaTypes().toString().replaceAll("[\\[\\]]", "");
         String error = ex.getContentType() + "media type is not supported. Supported media types: " + supportedType;
         ApiError apiError = new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getLocalizedMessage(), error);
+        log.debug("Http media type not supported: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -173,6 +184,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         String error = "No handler found for " + ex.getHttpMethod() + ": " + ex.getRequestURL();
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
+        log.debug("No handler found: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
+
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -180,6 +193,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnknownException(Exception ex) {
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "Something went wrong");
+        log.error("Error occurred: {}", ex.getMessage(), ex);
+
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }

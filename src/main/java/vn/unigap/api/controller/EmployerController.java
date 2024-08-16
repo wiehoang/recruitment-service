@@ -2,7 +2,8 @@ package vn.unigap.api.controller;
 
 import jakarta.validation.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import vn.unigap.api.dto.in.EmployerDtoIn;
@@ -15,7 +16,9 @@ import vn.unigap.api.service.EmployerService;
 @RestController
 @RequestMapping(value = "/employer")
 public class EmployerController {
-    @Autowired
+
+    Logger logger = LoggerFactory.getLogger(EmployerController.class);
+
     private final EmployerService employerService;
 
     @GetMapping("/{id}")
