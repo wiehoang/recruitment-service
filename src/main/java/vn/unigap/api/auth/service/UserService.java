@@ -1,4 +1,8 @@
 package vn.unigap.api.auth.service;
 
-public class UserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+
+public interface UserService {
+    UserDetailsService userDetailsService();
 }
