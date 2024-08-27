@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import vn.unigap.api.dto.in.EmployerDtoIn;
 import vn.unigap.common.response.ApiResponse;
@@ -12,16 +14,16 @@ import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.service.EmployerService;
 
 
+@EnableMethodSecurity
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/employer")
 public class EmployerController {
 
-    Logger logger = LoggerFactory.getLogger(EmployerController.class);
-
     private final EmployerService employerService;
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYER', 'ROLE_SEEKER')")
     public ResponseEntity<?> getEmployerById(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(employerService.getEmployerById(id)));
     }

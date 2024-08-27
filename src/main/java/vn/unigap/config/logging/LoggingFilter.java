@@ -1,4 +1,4 @@
-package vn.unigap.filter;
+package vn.unigap.config.logging;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
