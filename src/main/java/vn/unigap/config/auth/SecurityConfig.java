@@ -16,11 +16,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import vn.unigap.api.service.CustomUserDetailsService;
+import vn.unigap.config.logging.LoggingFilter;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 
 @Slf4j
+@EnableMethodSecurity
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -28,18 +32,19 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userService;
     private final JwtAuthFilter jwtAuthFilter;
+    private final LoggingFilter loggingFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/api-docs/**")
+                        .permitAll().anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider());
+        http.addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -1,5 +1,7 @@
 package vn.unigap.common.exception;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -28,6 +31,7 @@ import vn.unigap.common.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Slf4j
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
@@ -40,6 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiResponse, e.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -62,6 +67,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingServletRequestPart(
             MissingServletRequestPartException ex,
             HttpHeaders headers,
@@ -77,6 +83,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
             MissingServletRequestParameterException ex,
             HttpHeaders headers,
@@ -91,6 +98,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingPathVariable(
             MissingPathVariableException ex,
             HttpHeaders headers,
@@ -105,6 +113,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleTypeMismatch(
             TypeMismatchException ex,
             HttpHeaders headers,
@@ -120,6 +129,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex,
             HttpHeaders headers,
@@ -133,6 +143,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleHttpMessageNotWritable(
             HttpMessageNotWritableException ex,
             HttpHeaders headers,
@@ -145,6 +156,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "405", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
             HttpRequestMethodNotSupportedException ex,
@@ -160,6 +172,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
             HttpMediaTypeNotSupportedException ex,
@@ -175,6 +188,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
             NoHandlerFoundException ex,
@@ -186,6 +200,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
         log.debug("No handler found: {}. Request details: {}", ex.getMessage(), request.getDescription(false), ex);
 
+
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
+
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), "Access denied");
+        log.error("Access denied: {}", ex.getMessage(), ex);
 
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
