@@ -14,7 +14,6 @@ import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.service.EmployerService;
 
 
-@EnableMethodSecurity
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/employer")
@@ -29,21 +28,25 @@ public class EmployerController {
     }
 
     @PostMapping(value = "")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYER')")
     public ResponseEntity<?> createEmployer(@RequestBody @Valid EmployerDtoIn employerDtoIn) {
         return ResponseEntity.ok(ApiResponse.success(employerService.createEmployer(employerDtoIn)));
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYER')")
     public ResponseEntity<?> updateEmployer(@PathVariable(value = "id") Long id, @RequestBody @Valid EmployerDtoIn employerDtoIn) {
         return ResponseEntity.ok(ApiResponse.success(employerService.updateEmployer(id, employerDtoIn)));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYER', 'ROLE_SEEKER')")
     public ResponseEntity<?> getAllEmployers(@RequestBody @Valid PageDtoIn pageDtoIn) {
         return ResponseEntity.ok(ApiResponse.success(employerService.getAllEmployers(pageDtoIn)));
     }
 
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYER')")
     public ResponseEntity<?> deleteEmployer(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(employerService.deleteEmployer(id)));
     }
