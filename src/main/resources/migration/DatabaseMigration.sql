@@ -1,4 +1,13 @@
 #
+# // Only run this migration script one time
+# 	@Bean
+# 	CommandLineRunner run(DatabaseMigrationService databaseMigrationService) {
+# 		return args -> {
+# 			databaseMigrationService.migrateResumeToJobProvince();
+# databaseMigrationService.migrateResumeToJobField();
+# };
+# }
+#
 # -- Create additional table to transfer data between Jobs, JobProvince and JobField tables
 # CREATE TABLE JobsToJobProvince (id BIGINT AUTO_INCREMENT PRIMARY KEY,
 #                                 job_id BIGINT NOT NULL,
