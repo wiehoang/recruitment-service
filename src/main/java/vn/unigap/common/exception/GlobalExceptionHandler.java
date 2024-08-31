@@ -37,14 +37,16 @@ import java.util.List;
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleCustomException(ApiException e) {
-        ApiResponse<Object> apiResponse = ApiResponse.error(e.getStatusCode(), e.getStatus(), e.getMessage());
+        String error = "";
+        ApiError apiError = new ApiError(e.getStatus(), e.getMessage(), error);
         log.debug("Error occurred: {}", e.getMessage(), e);
-        return new ResponseEntity<>(apiResponse, e.getStatus());
+        return new ResponseEntity<>(apiError, e.getStatus());
     }
 
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -66,8 +68,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingServletRequestPart(
             MissingServletRequestPartException ex,
             HttpHeaders headers,
@@ -82,8 +84,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
             MissingServletRequestParameterException ex,
             HttpHeaders headers,
@@ -97,8 +99,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleMissingPathVariable(
             MissingPathVariableException ex,
             HttpHeaders headers,
@@ -112,8 +114,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleTypeMismatch(
             TypeMismatchException ex,
             HttpHeaders headers,
@@ -128,8 +130,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex,
             HttpHeaders headers,
@@ -142,8 +144,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
     protected ResponseEntity<Object> handleHttpMessageNotWritable(
             HttpMessageNotWritableException ex,
             HttpHeaders headers,
@@ -156,7 +158,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "405", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "405", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
             HttpRequestMethodNotSupportedException ex,
@@ -172,7 +174,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
             HttpMediaTypeNotSupportedException ex,
@@ -188,7 +190,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
             NoHandlerFoundException ex,
@@ -204,7 +206,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
         ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), "Access denied");
