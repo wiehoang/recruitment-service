@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.unigap.api.dto.in.AuthSignInDtoIn;
 import vn.unigap.api.dto.in.AuthSignUpDtoIn;
 import vn.unigap.api.dto.out.AuthDtoOut;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public User signup(AuthSignUpDtoIn authSignUpDtoIn) {
 
         // Handle exists username
@@ -56,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public AuthDtoOut signin(AuthSignInDtoIn authSignInDtoIn) {
 
         // Use AuthenticationManager to authenticate input
