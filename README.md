@@ -13,30 +13,30 @@ A RESTful APIs for managing recruitment processes.
 
 ## Installation
 
-[Java 17 or higher](https://www.oracle.com/java/technologies/downloads/)
-[Docker & Docker Compose](https://docs.docker.com/get-started/get-docker/)
-[Maven](https://maven.apache.org/download.cgi)
+- [Java 17 or higher](https://www.oracle.com/java/technologies/downloads/)
+- [Docker & Docker Compose](https://docs.docker.com/get-started/get-docker/)
+- [Maven](https://maven.apache.org/download.cgi)
 
 ## Running the application
 
 1. Clone the repository:
 
-'''bash
+```bash
 git clone https://github.com/your-username/recruitment-service-api.git
 cd recruitment-service-api
-'''
+```
 
 2. Build the application:
 
-'''bash
+```bash
 ./mvnw clean install
-'''
+```
 
 3. Start the services using Docker Compose
 
-'''bash
+```bash
 docker-compose up -d
-'''
+```
 
 4. Access the APIs:
 
