@@ -22,7 +22,7 @@ A RESTful APIs for managing recruitment processes.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/recruitment-service.git
+git clone https://github.com/wiehoang/recruitment-service.git
 cd recruitment-service
 ```
 
