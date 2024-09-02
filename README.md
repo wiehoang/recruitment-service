@@ -22,8 +22,8 @@ A RESTful APIs for managing recruitment processes.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/recruitment-service-api.git
-cd recruitment-service-api
+git clone https://github.com/your-username/recruitment-service.git
+cd recruitment-service
 ```
 
 2. Build the application:
@@ -41,4 +41,4 @@ docker-compose up -d
 4. Access the APIs:
 
 - The APIs will be available at [http://localhost:8080](http://localhost:8080)
-- Swagger documentation: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+- Swagger documentation at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
