@@ -10,26 +10,27 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
+/** Static methods for converting between data types. */
 public class Common {
 
-    // Convert string into a set
-    public static Set<Long> convertStringToSet(String str) {
-        return Arrays.stream(str.split("[-_, ]"))
-                .filter(s -> !s.isEmpty())      // Convert fields type
-                .map(Long::parseLong)           // to implement into
-                .collect(Collectors.toSet());
-    }
+  /** Convert a string into a set. */
+  public static Set<Long> convertStringToSet(String str) {
+    return Arrays.stream(str.split("[-_, ]"))
+            .filter(s -> !s.isEmpty())      // Convert fields type
+            .map(Long::parseLong)           // to implement into
+            .collect(Collectors.toSet());
+  }
 
-    // Get current local time and convert into Date type
-    public static Date currentDateTime() {
-        return Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC));
-    }
+  // Get current local time and convert into Date type
+  public static Date currentDateTime() {
+    return Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+  }
 
-    // Convert Date to String with date's format
-    public static String formatBirthday(Date birthday) {
-        LocalDate localDateBirthday = birthday.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return formatter.format(localDateBirthday);
-    }
+  /** Convert Date to String followed by date's format. */
+  public static String formatBirthday(Date birthday) {
+    LocalDate localDateBirthday = birthday.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    return formatter.format(localDateBirthday);
+  }
 
 }

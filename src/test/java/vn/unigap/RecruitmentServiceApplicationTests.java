@@ -12,24 +12,24 @@ import vn.unigap.api.controller.SeekerController;
 @SpringBootTest
 class RecruitmentServiceApplicationTests {
 
-	@Autowired
-	private EmployerController employerController;
+  @Autowired
+  private EmployerController employerController;
 
-	@Autowired
-	private JobsController jobsController;
+  @Autowired
+  private JobsController jobsController;
 
-	@Autowired
-	private SeekerController seekerController;
+  @Autowired
+  private SeekerController seekerController;
 
-	@Autowired
-	private ResumeController resumeController;
+  @Autowired
+  private ResumeController resumeController;
 
-	@Test
-	void contextLoads() throws Exception {
-		Assertions.assertThat(employerController).isNotNull();
-		Assertions.assertThat(jobsController).isNotNull();
-		Assertions.assertThat(seekerController).isNotNull();
-		Assertions.assertThat(resumeController).isNotNull();
-	}
+  @Test
+  void contextLoads() throws Exception {
+    Assertions.assertThat(employerController).isNotNull();
+    Assertions.assertThat(jobsController).isNotNull();
+    Assertions.assertThat(seekerController).isNotNull();
+    Assertions.assertThat(resumeController).isNotNull();
+  }
 
 }

@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import vn.unigap.api.entity.Resume;
 
 
+/** Manages `Resume` entity with CRUD operations and custom queries. */
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
-    Page<Resume> findAllBySeekerId(Long seekerId, Pageable pageable);
+  Page<Resume> findAllBySeekerId(Long seekerId, Pageable pageable);
 }

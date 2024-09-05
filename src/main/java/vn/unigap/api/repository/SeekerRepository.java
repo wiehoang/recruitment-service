@@ -7,8 +7,12 @@ import org.springframework.stereotype.Repository;
 import vn.unigap.api.entity.Seeker;
 
 
+/** Manages `Seeker` entity with CRUD operations and custom queries. */
 @Repository
 public interface SeekerRepository extends JpaRepository<Seeker, Long> {
-    Page<Seeker> findAll(Pageable pageable);
-    Page<Seeker> findAllByJobProvinceId(Integer jobProvinceId, Pageable pageable);
+
+  Page<Seeker> findAll(Pageable pageable);
+
+  Page<Seeker> findAllByJobProvinceId(Integer jobProvinceId, Pageable pageable);
+
 }

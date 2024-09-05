@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 
+/** Configures OpenAPI documentation. */
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
@@ -32,10 +33,10 @@ import org.springframework.context.annotation.Configuration;
 )
 public class ApiDocConfig {
 
-        @Value("${api.version}")
-        String apiVersion;
+  @Value("${api.version}")
+  String apiVersion;
 
-        @Value("${api.server.url}")
-        String apiServerUrl;
+  @Value("${api.server.url}")
+  String apiServerUrl;
 
 }

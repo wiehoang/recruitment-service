@@ -7,6 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+/**
+ * The `SeekerDtoOut` class represents the Data Transfer Object (DTO)
+ * for responding a seeker object.
+ */
 @Builder
 @Data
 @AllArgsConstructor
@@ -14,11 +18,11 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SeekerDtoOut {
 
-    private Long id;
-    private String name;
-    private String birthday;
-    private String address;
-    private Integer provinceId;
-    private String provinceName;
+  private Long id;
+  private String name;
+  private String birthday;
+  private String address;
+  private Integer provinceId;
+  private String provinceName;
 
 }

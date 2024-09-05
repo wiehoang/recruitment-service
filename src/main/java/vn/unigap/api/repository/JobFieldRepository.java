@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import vn.unigap.api.entity.JobField;
 
 
+/** Manages `JobField` entity with CRUD operations and custom queries. */
 @Repository
 public interface JobFieldRepository extends JpaRepository<JobField, Long> {
 }

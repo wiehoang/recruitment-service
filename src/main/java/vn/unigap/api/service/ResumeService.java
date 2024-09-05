@@ -8,12 +8,18 @@ import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.ResumeDtoOut;
 
 
+/** Service interface for managing resume-related operations. */
 @Service
 public interface ResumeService {
-    ResumeDtoOut createResume(ResumeDtoIn resumeDtoIn);
-    ResumeDtoOut updateResume(Long id, UpdateResumeDtoIn updateResumeDtoIn);
-    ResumeDtoOut getResume(Long id);
-    PageDtoOut<ResumeDtoOut> getAllResumes(Long seekerId, PageDtoIn pageDtoIn);
-    boolean deleteResume(Long id);
+
+  ResumeDtoOut createResume(ResumeDtoIn resumeDtoIn);
+
+  ResumeDtoOut updateResume(Long id, UpdateResumeDtoIn updateResumeDtoIn);
+
+  ResumeDtoOut getResume(Long id);
+
+  PageDtoOut<ResumeDtoOut> getAllResumes(Long seekerId, PageDtoIn pageDtoIn);
+
+  boolean deleteResume(Long id);
 
 }

@@ -11,20 +11,21 @@ import vn.unigap.api.entity.User;
 import vn.unigap.api.repository.UserRepository;
 
 
+/** Implementation of the `UserDetailsService` interface, which is part of Spring Security. */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    final private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) {
+  @Override
+  @Transactional
+  public UserDetails loadUserByUsername(String username) {
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new CustomUserDetails(user);
-    }
+    return new CustomUserDetails(user);
+  }
 
 }
